@@ -1,7 +1,14 @@
-// Fermat Primality Test
+// Miller-Rabin Primality Test
 
 #include <stdio.h>
 #include <stdlib.h>
+
+int find_greatest_common_divisor(int a, int b)
+{
+    if (b == 0) return a;
+    
+    return find_greatest_common_divisor(b, a % b);
+}
 
 int get_random_integer(int exclusive_lower_bound, int exclusive_upper_bound)
 {
@@ -27,18 +34,32 @@ int exponentiate_modularly(int base, int index, int modulus)
     return residue;    
 }
 
-int test_primality(int prime_candidate)
+int test_primality(int prime_candidate, int rounds)
 {
-    // 1 < a < p - 1
-    int witness_candidate = get_random_integer(1, prime_candidate);
+    if (prime_candidate == 2) return 1;
+    if (!(prime_candidate & 1) || prime_candidate < 2) return 0;
+
+    int prime_candidate_less_one = prime_candidate - 1;
     
-    // p is prime if aᵖ⁻¹ ≡ 1 (mod p)
-    if (exponentiate_modularly(witness_candidate, prime_candidate - 1, prime_candidate) == 1) return 1;
-    else return 0;
+    while (rounds > 0)
+    {
+        // 1 < a < p - 1
+        int witness_candidate = get_random_integer(1, prime_candidate_less_one);
+        
+        if (find_greatest_common_divisor(prime_candidate, witness_candidate) != 1 ||
+            // p is prime if aᵖ⁻¹ ≡ 1 (mod p)
+            // p is composite if aᵖ⁻¹ ≢ 1 (mod p)
+            exponentiate_modularly(witness_candidate, prime_candidate_less_one, prime_candidate) != 1)
+            return 0;
+        
+        rounds--;
+    }
+    
+    return 1;
 }
 
 int main(int argc, char *argv[])
-{
+{        
     int prime_candidate;
     
     if (argc > 1)
@@ -47,7 +68,7 @@ int main(int argc, char *argv[])
         {
             prime_candidate = atoi(argv[argument]);
             
-            if (test_primality(prime_candidate)) printf("%d is a prime number.", prime_candidate);
+            if (test_primality(prime_candidate, 12)) printf("%d is a prime number.", prime_candidate);
             else printf("%d is not a prime number.", prime_candidate);
 
             printf("\n\n");
@@ -56,29 +77,29 @@ int main(int argc, char *argv[])
     
     for (;;)
     {    
-        printf("Enter an odd candidate integer to test for primality: ");
+        printf("Enter a candidate integer to test for primality: ");
         
         // integer input validation
         // https://jackstromberg.com/2013/02/how-to-validate-numeric-integer-input-in-c/
         
-        int input, status, temp;
+        int input, status, buffer;
 
-    	status = scanf("%d", &input);
+      	status = scanf("%d", &input);
+      	
+      	while (status != 1)
+      	{
+              while ((buffer = getchar()) != EOF && buffer != '\n');
+              
+              printf("Invalid input.");
+              printf("\n\n");
+              printf("Enter a candidate integer to test for primality: ");
+              
+              status = scanf("%d", &input);
+      	}
+      
+      	prime_candidate = input;
     	
-    	while(status != 1)
-    	{
-            while((temp = getchar()) != EOF && temp != '\n');
-            
-            printf("Invalid input.");
-            printf("\n\n");
-            printf("Enter an odd candidate integer to test for primality: ");
-            
-            status = scanf("%d", &input);
-    	}
-    
-    	prime_candidate = input;
-    	
-    	if (test_primality(prime_candidate)) printf("%d is a prime number.", prime_candidate);
+    	if (test_primality(prime_candidate, 12)) printf("%d is a prime number.", prime_candidate);
         else printf("%d is not a prime number.", prime_candidate);
         
         printf("\n\n");
