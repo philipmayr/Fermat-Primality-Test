@@ -21,7 +21,7 @@ int exponentiate_modularly(int base, int index, int modulus)
     
     if (base == 0) return 0;
     
-    while (index > 0)
+    while (index)
     {
         if (index & 1) residue = (residue * base) % modulus;
         
@@ -39,7 +39,7 @@ int test_primality(int prime_candidate, int rounds)
 
     int prime_candidate_less_one = prime_candidate - 1;
     
-    while (rounds > 0)
+    while (rounds)
     {
         // 1 < a < p - 1
         int witness_candidate = get_random_integer(1, prime_candidate_less_one);
