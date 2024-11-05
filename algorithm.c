@@ -1,13 +1,11 @@
-// Miller-Rabin Primality Test
+// Fermat Primality Test
 
 #include <stdio.h>
 #include <stdlib.h>
 
 int find_greatest_common_divisor(int a, int b)
-{
-    if (b == 0) return a;
-    
-    return find_greatest_common_divisor(b, a % b);
+{    
+    return (b ? find_greatest_common_divisor(b, a % b) : a);
 }
 
 int get_random_integer(int exclusive_lower_bound, int exclusive_upper_bound)
@@ -37,7 +35,7 @@ int exponentiate_modularly(int base, int index, int modulus)
 int test_primality(int prime_candidate, int rounds)
 {
     if (prime_candidate == 2) return 1;
-    if (!(prime_candidate & 1) || prime_candidate < 2) return 0;
+    if (~prime_candidate & 1 || prime_candidate < 2) return 0;
 
     int prime_candidate_less_one = prime_candidate - 1;
     
