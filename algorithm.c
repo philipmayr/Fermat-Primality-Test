@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 int find_greatest_common_divisor(int a, int b)
-{    
+{
     return b ? find_greatest_common_divisor(b, a % b) : a;
 }
 
@@ -29,7 +29,7 @@ int exponentiate_modularly(int base, int index, int modulus)
         index >>= 1;
     }
     
-    return residue;    
+    return residue;
 }
 
 int test_primality(int prime_candidate, int rounds)
@@ -57,7 +57,7 @@ int test_primality(int prime_candidate, int rounds)
 }
 
 int main(int argc, char *argv[])
-{        
+{
     int prime_candidate;
     
     if (argc > 1)
@@ -68,13 +68,13 @@ int main(int argc, char *argv[])
             
             if (test_primality(prime_candidate, 12)) printf("%d is a prime number.", prime_candidate);
             else printf("%d is not a prime number.", prime_candidate);
-
+            
             printf("\n\n");
         }
     }
     
     for (;;)
-    {    
+    {
         printf("Enter a candidate integer to test for primality: ");
         
         // integer input validation
