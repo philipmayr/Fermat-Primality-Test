@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     
     for (;;)
     {
-        printf("Enter a candidate integer to test for primality: ");
+        printf("Enter a candidate integer to test primality: ");
         
         // integer input validation
         // https://jackstromberg.com/2013/02/how-to-validate-numeric-integer-input-in-c/
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
               
               printf("Invalid input.");
               printf("\n\n");
-              printf("Enter a candidate integer to test for primality: ");
+              printf("Enter a candidate integer to test primality: ");
               
               status = scanf("%d", & input);
       	}
