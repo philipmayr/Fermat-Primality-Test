@@ -1,27 +1,35 @@
 // Fermat Primality Test
 
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-int find_greatest_common_divisor(int a, int b)
+typedef unsigned long long integer;
+
+integer find_greatest_common_divisor(integer a, integer b)
 {
     return b ? find_greatest_common_divisor(b, a % b) : a;
 }
 
-int get_random_integer(int exclusive_lower_bound, int exclusive_upper_bound)
+integer get_random_integer(integer inclusive_lower_bound, integer inclusive_upper_bound)
 {
-    return rand() % (exclusive_upper_bound - exclusive_lower_bound + 1) + exclusive_lower_bound;
+    if (inclusive_upper_bound < inclusive_lower_bound) return inclusive_lower_bound;
+
+    integer range = inclusive_upper_bound - inclusive_lower_bound + 1;
+    return (integer) (rand() % range) + inclusive_lower_bound;
 }
 
-int exponentiate_modularly(int base, int index, int modulus)
+integer exponentiate_modularly(integer base, integer index, integer modulus)
 {
-    if (base == 0) return 0;
-    if (index == 0) return 1;
-
-    if (base > modulus) base %= modulus;
+    if (modulus < 2) return 0;
+    if (index == 0) return 1 % modulus;
+    
+    base %= modulus;
+    
+    // if (base < 0) base += modulus;
     if (index == 1) return base;
     
-    int modular_power = 1;
+    integer modular_power = 1;
     
     while (index)
     {
@@ -34,17 +42,18 @@ int exponentiate_modularly(int base, int index, int modulus)
     return modular_power;
 }
 
-int test_primality(int prime_candidate, int rounds)
+integer test_primality(integer prime_candidate, integer rounds)
 {
     if (prime_candidate == 2) return 1;
     if (~prime_candidate & 1 || prime_candidate < 2) return 0;
-
-    int prime_candidate_less_one = prime_candidate - 1;
+    
+    integer prime_candidate_less_one = prime_candidate - 1;
     
     while (rounds)
     {
         // 1 < a < p - 1
-        int witness_candidate = get_random_integer(1, prime_candidate_less_one);
+        // if (prime_candidate_less_one < 3) return 0;
+        integer witness_candidate = get_random_integer(2, prime_candidate_less_one);
         
         if (find_greatest_common_divisor(prime_candidate, witness_candidate) != 1 ||
             // p is prime if aᵖ⁻¹ ≡ 1 (mod p)
@@ -58,18 +67,20 @@ int test_primality(int prime_candidate, int rounds)
     return 1;
 }
 
-int main(int argugment_count, char *arguments[])
+integer main(integer argugment_count, char *arguments[])
 {
-    int prime_candidate;
+    srand((unsigned)time(NULL));
+    
+    integer prime_candidate;
     
     if (argugment_count > 1)
     {
-        for (int argument = 1; argument < argugment_count; argument++)
+        for (integer argument = 1; argument < argugment_count; argument++)
         {
-            prime_candidate = atoi(arguments[argument]);
+            prime_candidate = strtoull(arguments[argument], NULL, 10);
             
-            if (test_primality(prime_candidate, 12)) printf("%d is a prime number.", prime_candidate);
-            else printf("%d is not a prime number.", prime_candidate);
+            if (test_primality(prime_candidate, 12)) printf("%llu is a prime number.", prime_candidate);
+            else printf("%llu is not a prime number.", prime_candidate);
             
             printf("\n\n");
         }
@@ -77,14 +88,14 @@ int main(int argugment_count, char *arguments[])
     
     for (;;)
     {
-        printf("Enter a candidate integer to test its primality: ");
+        printf("Enter a candidate integereger to test its primality: ");
         
-        // integer input validation
-        // https://jackstromberg.com/2013/02/how-to-validate-numeric-integer-input-in-c/
+        // integereger input validation
+        // https://jackstromberg.com/2013/02/how-to-validate-numeric-integereger-input-in-c/
         
-        int input, status, buffer;
-
-        status = scanf("%d", & input);
+        integer input, status, buffer;
+        
+        status = scanf("%llu", & input);
         
         while (status != 1)
         {
@@ -92,15 +103,15 @@ int main(int argugment_count, char *arguments[])
               
               printf("Invalid input.");
               printf("\n\n");
-              printf("Enter a candidate integer to test its primality: ");
+              printf("Enter a candidate integereger to test its primality: ");
               
-              status = scanf("%d", & input);
+              status = scanf("%llu", & input);
         }
         
         prime_candidate = input;
         
-        if (test_primality(prime_candidate, 12)) printf("%d is a prime number.", prime_candidate);
-        else printf("%d is not a prime number.", prime_candidate);
+        if (test_primality(prime_candidate, 12)) printf("%llu is a prime number.", prime_candidate);
+        else printf("%llu is not a prime number.", prime_candidate);
         
         printf("\n\n");
     }
