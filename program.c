@@ -14,8 +14,8 @@ integer find_greatest_common_divisor(integer a, integer b)
 integer get_random_integer(integer inclusive_lower_bound, integer inclusive_upper_bound)
 {
     if (inclusive_upper_bound < inclusive_lower_bound) return inclusive_lower_bound;
-    integer range = inclusive_upper_bound - inclusive_lower_bound + 1;
     
+    integer range = inclusive_upper_bound - inclusive_lower_bound + 1;
     return (integer) (rand() % range) + inclusive_lower_bound;
 }
 
@@ -26,7 +26,7 @@ integer exponentiate_modularly(integer base, integer index, integer modulus)
     
     base %= modulus;
     
-    // if (base < 0) base += modulus;
+    if (base < 0) base += modulus;
     if (index == 1) return base;
     
     integer modular_power = 1;
@@ -52,7 +52,7 @@ integer test_primality(integer prime_candidate, integer rounds)
     while (rounds)
     {
         // 1 < a < p - 1
-        // if (prime_candidate_less_one < 3) return 0;
+        if (prime_candidate_less_one < 3) return (prime_candidate == 2);
         integer witness_candidate = get_random_integer(2, prime_candidate_less_one);
         
         if (find_greatest_common_divisor(prime_candidate, witness_candidate) != 1 ||
