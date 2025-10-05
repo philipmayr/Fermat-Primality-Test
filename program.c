@@ -14,8 +14,8 @@ integer find_greatest_common_divisor(integer a, integer b)
 integer get_random_integer(integer inclusive_lower_bound, integer inclusive_upper_bound)
 {
     if (inclusive_upper_bound < inclusive_lower_bound) return inclusive_lower_bound;
-
     integer range = inclusive_upper_bound - inclusive_lower_bound + 1;
+    
     return (integer) (rand() % range) + inclusive_lower_bound;
 }
 
