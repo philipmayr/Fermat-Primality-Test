@@ -90,8 +90,8 @@ integer main(integer argugment_count, char *arguments[])
     {
         printf("Enter a candidate integereger to test its primality: ");
         
-        // integereger input validation
-        // https://jackstromberg.com/2013/02/how-to-validate-numeric-integereger-input-in-c/
+        // integer input validation
+        // https://jackstromberg.com/2013/02/how-to-validate-numeric-integer-input-in-c/
         
         integer input, status, buffer;
         
