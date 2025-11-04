@@ -11,7 +11,7 @@ integer find_greatest_common_divisor(integer a, integer b)
     return b ? find_greatest_common_divisor(b, a % b) : a;
 }
 
-integer get_random_integer(integer inclusive_lower_bound, integer inclusive_upper_bound)
+integer draw_random_integer(integer inclusive_lower_bound, integer inclusive_upper_bound)
 {
     if (inclusive_upper_bound < inclusive_lower_bound) return inclusive_lower_bound;
     
@@ -53,7 +53,7 @@ integer test_primality(integer prime_candidate, integer rounds)
     {
         // 1 < a < p - 1
         if (prime_candidate_less_one < 3) return (prime_candidate == 2);
-        integer witness_candidate = get_random_integer(2, prime_candidate_less_one);
+        integer witness_candidate = draw_random_integer(2, prime_candidate_less_one);
         
         if (find_greatest_common_divisor(prime_candidate, witness_candidate) != 1 ||
             // p is prime if aᵖ⁻¹ ≡ 1 (mod p)
